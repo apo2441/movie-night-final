@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Movie Night – Film Gecesi | Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital@1&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root {
+    --red: #c0392b;
+    --red-bright: #e74c3c;
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #181818;
+    --border: #2a2a2a;
+    --gold: #f0c040;
+    --text: #e8e8e8;
+    --muted: #888;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Spider web corners */
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    width: 200px; height: 200px;
+    background-image:
+      radial-gradient(circle, transparent 60%, rgba(192,57,43,0.15) 100%),
+      repeating-conic-gradient(from 0deg at 0% 0%, transparent 0deg, transparent 9deg, rgba(192,57,43,0.2) 9deg, rgba(192,57,43,0.2) 10deg);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::before { top:0; left:0; }
+  body::after  { bottom:0; right:0; transform: rotate(180deg); }
+
+  .noise {
+    position: fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.4;
+  }
+
+  header {
+    position: relative; z-index:1;
+    text-align: center;
+    padding: 48px 20px 0;
+  }
+
+  .org-logos {
+    display: flex; justify-content: center; gap: 14px;
+    flex-wrap: wrap; margin-bottom: 32px;
+  }
+  .org-logos img {
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 2px solid var(--border);
+    background: #fff;
+    object-fit: contain; padding: 3px;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .org-logos img:hover { transform: scale(1.12); border-color: var(--red); }
+
+  .org-label {
+    font-size: 11px; letter-spacing: 4px; color: var(--muted);
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .org-label span { color: var(--red); margin: 0 6px; }
+
+  .title-block { margin-bottom: 8px; line-height: 1; }
+  .title-block .movie { font-family: 'Bebas Neue', sans-serif; font-size: clamp(72px,16vw,128px); color: #fff; letter-spacing: 4px; display: block; }
+  .title-block .night  { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(40px,10vw,80px); color: var(--red-bright); display: block; margin-top: -12px; }
+  .title-block .gecesi { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(18px,4vw,32px); color: var(--muted); display: block; margin-top: -4px; }
+
+  .event-meta {
+    display: flex; justify-content: center; gap: 32px;
+    flex-wrap: wrap; margin: 24px 0 40px;
+  }
+  .meta-item { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  .meta-item svg { color: var(--red); flex-shrink: 0; }
+  .meta-item strong { color: #fff; }
+  .meta-item span { color: var(--muted); font-size: 11px; display: block; }
+
+  /* Lang toggle */
+  .lang-toggle {
+    position: fixed; top: 20px; right: 20px; z-index: 100;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 30px; display: flex; overflow: hidden;
+  }
+  .lang-btn {
+    padding: 8px 18px; font-size: 13px; font-weight: 600;
+    cursor: pointer; border: none; background: transparent;
+    color: var(--muted); font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s; letter-spacing: 1px;
+  }
+  .lang-btn.active { background: var(--red); color: #fff; }
+
+  /* Form container */
+  .container {
+    position: relative; z-index:1;
+    max-width: 600px; margin: 0 auto; padding: 0 20px 80px;
+  }
+
+  .form-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(192,57,43,0.1);
+  }
+
+  .form-card-header {
+    background: linear-gradient(135deg, var(--red) 0%, #8b0000 100%);
+    padding: 24px 32px;
+    position: relative; overflow: hidden;
+  }
+  .form-card-header::after {
+    content: '🕷';
+    position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+    font-size: 48px; opacity: 0.3;
+  }
+  .form-card-header h2 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; }
+  .form-card-header p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+
+  .form-body { padding: 32px; }
+
+  .field-group { margin-bottom: 22px; }
+  label {
+    display: block; font-size: 12px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  label .req { color: var(--red); margin-left: 2px; }
+
+  input, select {
+    width: 100%; padding: 14px 16px;
+    background: var(--dark); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus {
+    outline: none; border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.15);
+  }
+  input::placeholder { color: #444; }
+  select option { background: var(--dark); }
+
+  .select-wrapper { position: relative; }
+  .select-wrapper::after {
+    content: '▾'; position: absolute; right: 16px; top: 50%;
+    transform: translateY(-50%); color: var(--muted); pointer-events: none;
+  }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .divider {
+    height: 1px; background: var(--border);
+    margin: 28px 0; position: relative;
+  }
+  .divider span {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%,-50%);
+    background: var(--card); padding: 0 12px;
+    font-size: 11px; color: var(--muted); letter-spacing: 2px;
+  }
+
+  .submit-btn {
+    width: 100%; padding: 16px;
+    background: linear-gradient(135deg, var(--red) 0%, #8b0000 100%);
+    border: none; border-radius: 10px; color: #fff;
+    font-family: 'Bebas Neue', sans-serif; font-size: 22px;
+    letter-spacing: 3px; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(192,57,43,0.4);
+  }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .submit-btn .spinner {
+    display: none; width: 20px; height: 20px;
+    border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+  }
+  .submit-btn.loading .btn-text { display: none; }
+  .submit-btn.loading .spinner { display: block; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-msg {
+    color: var(--red-bright); font-size: 12px;
+    margin-top: 6px; display: none;
+  }
+  .field-group.error input,
+  .field-group.error select { border-color: var(--red-bright); }
+  .field-group.error .error-msg { display: block; }
+
+  /* Success screen */
+  .success-screen {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.97);
+    flex-direction: column; align-items: center; justify-content: center;
+    padding: 20px; text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+  .success-screen.show { display: flex; }
+  @keyframes fadeIn { from { opacity:0; transform: scale(0.95); } to { opacity:1; transform: scale(1); } }
+
+  .qr-wrapper {
+    background: #fff; border-radius: 16px;
+    padding: 20px; margin: 24px 0;
+    box-shadow: 0 0 40px rgba(192,57,43,0.4);
+    position: relative;
+  }
+  .qr-wrapper::before, .qr-wrapper::after {
+    content: ''; position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--red); border-style: solid;
+  }
+  .qr-wrapper::before { top:-4px; left:-4px; border-width: 3px 0 0 3px; border-radius: 4px 0 0 0; }
+  .qr-wrapper::after  { bottom:-4px; right:-4px; border-width: 0 3px 3px 0; border-radius: 0 0 4px 0; }
+
+  #qrcode canvas, #qrcode img { display: block; }
+
+  .success-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px; letter-spacing: 2px;
+    color: #fff; margin-top: 8px;
+  }
+  .success-id {
+    font-size: 13px; color: var(--muted);
+    font-family: monospace; margin-top: 4px;
+    background: var(--dark); padding: 6px 14px;
+    border-radius: 20px; display: inline-block;
+  }
+  .success-msg {
+    font-size: 15px; color: var(--text);
+    max-width: 360px; line-height: 1.6; margin-top: 16px;
+  }
+  .success-msg strong { color: var(--gold); }
+
+  .save-hint {
+    margin-top: 20px; padding: 14px 20px;
+    background: rgba(192,57,43,0.1); border: 1px solid rgba(192,57,43,0.3);
+    border-radius: 10px; font-size: 13px; color: var(--muted);
+    max-width: 360px;
+  }
+  .save-hint strong { color: var(--red-bright); }
+
+  .close-btn {
+    margin-top: 24px; padding: 12px 32px;
+    background: transparent; border: 1px solid var(--border);
+    border-radius: 8px; color: var(--muted);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .close-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* Already registered */
+  .already-msg {
+    display: none; padding: 14px 16px;
+    background: rgba(240,192,64,0.1); border: 1px solid rgba(240,192,64,0.3);
+    border-radius: 10px; font-size: 14px; color: var(--gold);
+    margin-top: 16px; text-align: center;
+  }
+
+  /* Poster side decoration */
+  .poster-strip {
+    width: 100%; max-width: 600px; margin: 0 auto 32px;
+    border-radius: 12px; overflow: hidden;
+    position: relative; z-index: 1;
+  }
+  .poster-strip img { width: 100%; display: block; max-height: 220px; object-fit: cover; object-position: top; }
+
+  .red-line { height: 3px; background: linear-gradient(90deg, transparent, var(--red), transparent); margin-bottom: 32px; }
+
+  @media (max-width: 500px) {
+    .field-row { grid-template-columns: 1fr; }
+    .form-body { padding: 24px 20px; }
+    .form-card-header { padding: 20px 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<div class="lang-toggle">
+  <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+  <button class="lang-btn" onclick="setLang('tr')" id="btn-tr">TR</button>
+</div>
+
+<div class="success-screen" id="successScreen">
+  <div style="font-size:13px;letter-spacing:3px;color:var(--muted);text-transform:uppercase" data-en="Registration Complete" data-tr="Kayıt Tamamlandı">Registration Complete</div>
+  <div class="success-name" id="successName"></div>
+  <div class="success-id" id="successUid"></div>
+  <div class="qr-wrapper">
+    <div id="qrcode"></div>
+  </div>
+  <div class="success-msg" id="successMsg">
+    <strong data-en="Show this QR code at the entrance on May 20!" data-tr="20 Mayıs'ta girişte bu QR kodu göster!">Show this QR code at the entrance on May 20!</strong><br/>
+    <span data-en="Screenshot or save this page — you'll need it on event day." data-tr="Bu sayfanın ekran görüntüsünü al — etkinlik günü lazım olacak.">Screenshot or save this page — you'll need it on event day.</span>
+  </div>
+  <div class="save-hint">
+    📸 <strong data-en="Take a screenshot now!" data-tr="Hemen ekran görüntüsü al!">Take a screenshot now!</strong>
+    <span data-en=" This QR code won't be shown again." data-tr=" Bu QR kodu bir daha gösterilmeyecek."> This QR code won't be shown again.</span>
+  </div>
+  <button class="close-btn" onclick="document.getElementById('successScreen').classList.remove('show')" data-en="Close" data-tr="Kapat">Close</button>
+</div>
+
+<header>
+  <div class="org-label"><span>★</span> <span data-en="ORGANIZED BY" data-tr="DÜZENLEYEN TOPLULUKLAR">ORGANIZED BY</span> <span>★</span></div>
+  <div class="org-logos">
+    <img src="logos/logo1.png" alt="Sosyal Duyarlılık" onerror="this.style.display='none'"/>
+    <img src="logos/logo2.png" alt="ABU Media" onerror="this.style.display='none'"/>
+    <img src="logos/logo3.png" alt="USS" onerror="this.style.display='none'"/>
+    <img src="logos/logo4.png" alt="ABU Müzik" onerror="this.style.display='none'"/>
+    <img src="logos/logo5.png" alt="Hukuk Topluluğu" onerror="this.style.display='none'"/>
+  </div>
+
+  <div class="title-block">
+    <span class="movie" data-en="MOVIE" data-tr="FİLM">MOVIE</span>
+    <span class="night" data-en="Night" data-tr="Gecesi">Night</span>
+  </div>
+
+  <div class="event-meta">
+    <div class="meta-item">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <div>
+        <strong>20 <span data-en="May" data-tr="Mayıs">May</span></strong>
+        <span data-en="Wednesday" data-tr="Çarşamba">Wednesday</span>
+      </div>
+    </div>
+    <div class="meta-item">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <div>
+        <strong>18:00</strong>
+        <span data-en="Sharp" data-tr="Keskin">Sharp</span>
+      </div>
+    </div>
+    <div class="meta-item">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <div>
+        <strong>Avlu Sahne</strong>
+        <span data-en="Venue" data-tr="Mekan">Venue</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="red-line"></div>
+
+<div class="container">
+  <div class="form-card">
+    <div class="form-card-header">
+      <h2 data-en="REGISTER NOW" data-tr="KAYIT OL">REGISTER NOW</h2>
+      <p data-en="Spider-Man: Homecoming · Free Entry · Popcorn included 🍿" data-tr="Spider-Man: Homecoming · Ücretsiz Giriş · Patlamış mısır dahil 🍿">Spider-Man: Homecoming · Free Entry · Popcorn included 🍿</p>
+    </div>
+    <div class="form-body">
+      <form id="regForm" novalidate>
+
+        <div class="field-row">
+          <div class="field-group" id="fg-name">
+            <label data-en="First Name <span class='req'>*</span>" data-tr="Ad <span class='req'>*</span>">First Name <span class="req">*</span></label>
+            <input type="text" id="firstName" placeholder="Peter" autocomplete="given-name"/>
+            <div class="error-msg" data-en="Required" data-tr="Zorunlu">Required</div>
+          </div>
+          <div class="field-group" id="fg-surname">
+            <label data-en="Last Name <span class='req'>*</span>" data-tr="Soyad <span class='req'>*</span>">Last Name <span class="req">*</span></label>
+            <input type="text" id="lastName" placeholder="Parker" autocomplete="family-name"/>
+            <div class="error-msg" data-en="Required" data-tr="Zorunlu">Required</div>
+          </div>
+        </div>
+
+        <div class="field-group" id="fg-phone">
+          <label data-en="Phone Number <span class='req'>*</span>" data-tr="Telefon Numarası <span class='req'>*</span>">Phone Number <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="05XX XXX XX XX" autocomplete="tel"/>
+          <div class="error-msg" data-en="Enter a valid phone number" data-tr="Geçerli bir telefon numarası girin">Enter a valid phone number</div>
+        </div>
+
+        <div class="field-group" id="fg-uni">
+          <label data-en="University <span class='req'>*</span>" data-tr="Üniversite <span class='req'>*</span>">University <span class="req">*</span></label>
+          <div class="select-wrapper">
+            <select id="university" onchange="handleUniChange()">
+              <option value="" data-en="— Select your university —" data-tr="— Üniversitenizi seçin —">— Select your university —</option>
+              <option value="Ankara Bilim Üniversitesi">Ankara Bilim Üniversitesi</option>
+              <option value="Orta Doğu Teknik Üniversitesi (ODTÜ)">Orta Doğu Teknik Üniversitesi (ODTÜ)</option>
+              <option value="Hacettepe Üniversitesi">Hacettepe Üniversitesi</option>
+              <option value="Ankara Üniversitesi">Ankara Üniversitesi</option>
+              <option value="Bilkent Üniversitesi">Bilkent Üniversitesi</option>
+              <option value="Gazi Üniversitesi">Gazi Üniversitesi</option>
+              <option value="Atılım Üniversitesi">Atılım Üniversitesi</option>
+              <option value="Başkent Üniversitesi">Başkent Üniversitesi</option>
+              <option value="TED Üniversitesi">TED Üniversitesi</option>
+              <option value="Çankaya Üniversitesi">Çankaya Üniversitesi</option>
+              <option value="TOBB ETÜ">TOBB ETÜ</option>
+              <option value="Yıldırım Beyazıt Üniversitesi">Yıldırım Beyazıt Üniversitesi</option>
+              <option value="Türk-Alman Üniversitesi">Türk-Alman Üniversitesi</option>
+              <option value="Ufuk Üniversitesi">Ufuk Üniversitesi</option>
+              <option value="NOT_STUDENT" data-en="Not a student" data-tr="Öğrenci değilim">Not a student</option>
+            </select>
+          </div>
+          <div class="error-msg" data-en="Please select an option" data-tr="Lütfen seçim yapın">Please select an option</div>
+        </div>
+
+        <div class="field-group" id="fg-studentid">
+          <label id="studentIdLabel" data-en="Student ID <span class='req'>*</span>" data-tr="Öğrenci Numarası <span class='req'>*</span>">Student ID <span class="req">*</span></label>
+          <input type="text" id="studentId" placeholder="2024XXXXXXX"/>
+          <div class="error-msg" data-en="Required for students" data-tr="Öğrenciler için zorunlu">Required for students</div>
+        </div>
+
+        <div style="margin-top:28px">
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <span class="btn-text" data-en="REGISTER & GET QR CODE" data-tr="KAYIT OL & QR KODU AL">REGISTER & GET QR CODE</span>
+            <div class="spinner"></div>
+          </button>
+        </div>
+
+        <div class="already-msg" id="alreadyMsg">
+          <span data-en="⚠ This student ID is already registered." data-tr="⚠ Bu öğrenci numarası zaten kayıtlı.">⚠ This student ID is already registered.</span>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const GITHUB_TOKEN = 'github_pat_YOUR_TOKEN_HERE'; // MUST BE FINE-GRAINED TOKEN WITH REPO WRITE ACCESS
+const REPO_OWNER = 'YOUR_GITHUB_USERNAME_HERE';    // e.g., 'abdullah'
+const REPO_NAME = 'YOUR_REPO_NAME_HERE';         // e.g., 'movie-night-db'
+// ──────────────────────────────────────────────────────────────────────────────
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
+
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const val = el.getAttribute('data-' + lang);
+    if (val !== null) el.innerHTML = val;
+  });
+
+  const sel = document.getElementById('university');
+  const placeholder = sel.options[0];
+  placeholder.textContent = lang === 'tr' ? '— Üniversitenizi seçin —' : '— Select your university —';
+  const notStudent = sel.querySelector('option[value="NOT_STUDENT"]');
+  if (notStudent) notStudent.textContent = lang === 'tr' ? 'Öğrenci değilim' : 'Not a student';
+}
+
+function handleUniChange() {
+  const val = document.getElementById('university').value;
+  const isNotStudent = val === 'NOT_STUDENT';
+  const fg = document.getElementById('fg-studentid');
+  const input = document.getElementById('studentId');
+  const lbl = document.getElementById('studentIdLabel');
+
+  if (isNotStudent) {
+    input.required = false;
+    input.placeholder = currentLang === 'tr' ? 'Uygulanmaz' : 'N/A';
+    input.value = '';
+    input.disabled = true;
+    input.style.opacity = '0.4';
+    lbl.innerHTML = currentLang === 'tr' ? 'Öğrenci Numarası' : 'Student ID';
+    fg.classList.remove('error');
+  } else {
+    input.required = true;
+    input.disabled = false;
+    input.style.opacity = '1';
+    input.placeholder = '2024XXXXXXX';
+    lbl.innerHTML = currentLang === 'tr'
+      ? "Öğrenci Numarası <span class='req'>*</span>"
+      : "Student ID <span class='req'>*</span>";
+  }
+}
+
+function generateUID() {
+  const ts = Date.now().toString(36).toUpperCase();
+  const rand = Math.random().toString(36).substring(2,6).toUpperCase();
+  return 'MN-' + ts + '-' + rand;
+}
+
+function validate() {
+  let ok = true;
+  const fields = [
+    { id: 'fg-name', input: 'firstName', check: v => v.trim().length > 0 },
+    { id: 'fg-surname', input: 'lastName', check: v => v.trim().length > 0 },
+    { id: 'fg-phone', input: 'phone', check: v => /^[\d\s\+\-\(\)]{7,15}$/.test(v.trim()) },
+    { id: 'fg-uni', input: 'university', check: v => v !== '' },
+  ];
+
+  fields.forEach(f => {
+    const el = document.getElementById(f.input);
+    const fg = document.getElementById(f.id);
+    if (!f.check(el.value)) { fg.classList.add('error'); ok = false; }
+    else fg.classList.remove('error');
+  });
+
+  const uni = document.getElementById('university').value;
+  const sid = document.getElementById('studentId');
+  const fgSid = document.getElementById('fg-studentid');
+  if (uni !== 'NOT_STUDENT' && uni !== '' && sid.value.trim().length === 0) {
+    fgSid.classList.add('error'); ok = false;
+  } else {
+    fgSid.classList.remove('error');
+  }
+  return ok;
+}
+
+document.getElementById('regForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  document.getElementById('alreadyMsg').style.display = 'none';
+
+  if (!validate()) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.classList.add('loading');
+
+  const uid = generateUID();
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName  = document.getElementById('lastName').value.trim();
+  const phone     = document.getElementById('phone').value.trim();
+  const uni       = document.getElementById('university').value;
+  const sid       = document.getElementById('studentId').value.trim();
+
+  const payload = { 
+    uid, firstName, lastName, phone, university: uni, 
+    studentId: sid || 'N/A', timestamp: new Date().toISOString(),
+    admitted: false
+  };
+
+  try {
+    const base64Content = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+
+    const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data/${uid}.json`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${GITHUB_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: `Registration: ${firstName} ${lastName}`,
+        content: base64Content
+      })
+    });
+
+    if (!response.ok) throw new Error('GitHub API Error');
+    
+    showSuccess(uid, firstName + ' ' + lastName);
+  } catch(err) {
+    console.error('Submit error:', err);
+    alert("Registration failed. Please check your internet or GitHub token.");
+  }
+
+  btn.disabled = false; btn.classList.remove('loading');
+});
+
+function showSuccess(uid, fullName) {
+  document.getElementById('successName').textContent = fullName;
+  document.getElementById('successUid').textContent = uid;
+
+  const qrDiv = document.getElementById('qrcode');
+  qrDiv.innerHTML = '';
+
+  new QRCode(qrDiv, {
+    text: uid,
+    width: 220, height: 220,
+    colorDark: '#000000',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  setLang(currentLang);
+  document.getElementById('successScreen').classList.add('show');
+}
+</script>
+</body>
+</html>
