@@ -29,7 +29,6 @@
     overflow-x: hidden;
   }
 
-  /* Spider web corners */
   body::before, body::after {
     content: '';
     position: fixed;
@@ -77,7 +76,6 @@
   .title-block { margin-bottom: 8px; line-height: 1; }
   .title-block .movie { font-family: 'Bebas Neue', sans-serif; font-size: clamp(72px,16vw,128px); color: #fff; letter-spacing: 4px; display: block; }
   .title-block .night  { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(40px,10vw,80px); color: var(--red-bright); display: block; margin-top: -12px; }
-  .title-block .gecesi { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(18px,4vw,32px); color: var(--muted); display: block; margin-top: -4px; }
 
   .event-meta {
     display: flex; justify-content: center; gap: 32px;
@@ -88,7 +86,6 @@
   .meta-item strong { color: #fff; }
   .meta-item span { color: var(--muted); font-size: 11px; display: block; }
 
-  /* Lang toggle */
   .lang-toggle {
     position: fixed; top: 20px; right: 20px; z-index: 100;
     background: var(--card); border: 1px solid var(--border);
@@ -102,7 +99,6 @@
   }
   .lang-btn.active { background: var(--red); color: #fff; }
 
-  /* Form container */
   .container {
     position: relative; z-index:1;
     max-width: 600px; margin: 0 auto; padding: 0 20px 80px;
@@ -162,17 +158,6 @@
 
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
-  .divider {
-    height: 1px; background: var(--border);
-    margin: 28px 0; position: relative;
-  }
-  .divider span {
-    position: absolute; left: 50%; top: 50%;
-    transform: translate(-50%,-50%);
-    background: var(--card); padding: 0 12px;
-    font-size: 11px; color: var(--muted); letter-spacing: 2px;
-  }
-
   .submit-btn {
     width: 100%; padding: 16px;
     background: linear-gradient(135deg, var(--red) 0%, #8b0000 100%);
@@ -181,12 +166,12 @@
     letter-spacing: 3px; cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
     position: relative; overflow: hidden;
+    margin-top: 28px;
   }
   .submit-btn:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(192,57,43,0.4);
   }
-  .submit-btn:active { transform: translateY(0); }
   .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .submit-btn .spinner {
     display: none; width: 20px; height: 20px;
@@ -206,6 +191,13 @@
   .field-group.error input,
   .field-group.error select { border-color: var(--red-bright); }
   .field-group.error .error-msg { display: block; }
+
+  .global-error {
+    display: none; margin-top: 16px; padding: 12px 16px;
+    background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3);
+    border-radius: 10px; font-size: 14px; color: var(--red-bright);
+    text-align: center;
+  }
 
   /* Success screen */
   .success-screen {
@@ -268,23 +260,7 @@
   }
   .close-btn:hover { border-color: var(--red); color: var(--red); }
 
-  /* Already registered */
-  .already-msg {
-    display: none; padding: 14px 16px;
-    background: rgba(240,192,64,0.1); border: 1px solid rgba(240,192,64,0.3);
-    border-radius: 10px; font-size: 14px; color: var(--gold);
-    margin-top: 16px; text-align: center;
-  }
-
-  /* Poster side decoration */
-  .poster-strip {
-    width: 100%; max-width: 600px; margin: 0 auto 32px;
-    border-radius: 12px; overflow: hidden;
-    position: relative; z-index: 1;
-  }
-  .poster-strip img { width: 100%; display: block; max-height: 220px; object-fit: cover; object-position: top; }
-
-  .red-line { height: 3px; background: linear-gradient(90deg, transparent, var(--red), transparent); margin-bottom: 32px; }
+  .red-line { height: 3px; background: linear-gradient(90deg, transparent, var(--red), transparent); margin-bottom: 32px; position: relative; z-index: 1; }
 
   @media (max-width: 500px) {
     .field-row { grid-template-columns: 1fr; }
@@ -372,25 +348,25 @@
 
         <div class="field-row">
           <div class="field-group" id="fg-name">
-            <label data-en="First Name <span class='req'>*</span>" data-tr="Ad <span class='req'>*</span>">First Name <span class="req">*</span></label>
+            <label>First Name <span class="req">*</span></label>
             <input type="text" id="firstName" placeholder="Peter" autocomplete="given-name"/>
             <div class="error-msg" data-en="Required" data-tr="Zorunlu">Required</div>
           </div>
           <div class="field-group" id="fg-surname">
-            <label data-en="Last Name <span class='req'>*</span>" data-tr="Soyad <span class='req'>*</span>">Last Name <span class="req">*</span></label>
+            <label>Last Name <span class="req">*</span></label>
             <input type="text" id="lastName" placeholder="Parker" autocomplete="family-name"/>
             <div class="error-msg" data-en="Required" data-tr="Zorunlu">Required</div>
           </div>
         </div>
 
         <div class="field-group" id="fg-phone">
-          <label data-en="Phone Number <span class='req'>*</span>" data-tr="Telefon Numarası <span class='req'>*</span>">Phone Number <span class="req">*</span></label>
+          <label>Phone Number <span class="req">*</span></label>
           <input type="tel" id="phone" placeholder="05XX XXX XX XX" autocomplete="tel"/>
           <div class="error-msg" data-en="Enter a valid phone number" data-tr="Geçerli bir telefon numarası girin">Enter a valid phone number</div>
         </div>
 
         <div class="field-group" id="fg-uni">
-          <label data-en="University <span class='req'>*</span>" data-tr="Üniversite <span class='req'>*</span>">University <span class="req">*</span></label>
+          <label>University <span class="req">*</span></label>
           <div class="select-wrapper">
             <select id="university" onchange="handleUniChange()">
               <option value="" data-en="— Select your university —" data-tr="— Üniversitenizi seçin —">— Select your university —</option>
@@ -415,20 +391,18 @@
         </div>
 
         <div class="field-group" id="fg-studentid">
-          <label id="studentIdLabel" data-en="Student ID <span class='req'>*</span>" data-tr="Öğrenci Numarası <span class='req'>*</span>">Student ID <span class="req">*</span></label>
+          <label id="studentIdLabel">Student ID <span class="req">*</span></label>
           <input type="text" id="studentId" placeholder="2024XXXXXXX"/>
           <div class="error-msg" data-en="Required for students" data-tr="Öğrenciler için zorunlu">Required for students</div>
         </div>
 
-        <div style="margin-top:28px">
-          <button type="submit" class="submit-btn" id="submitBtn">
-            <span class="btn-text" data-en="REGISTER & GET QR CODE" data-tr="KAYIT OL & QR KODU AL">REGISTER & GET QR CODE</span>
-            <div class="spinner"></div>
-          </button>
-        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="btn-text" data-en="REGISTER & GET QR CODE" data-tr="KAYIT OL & QR KODU AL">REGISTER & GET QR CODE</span>
+          <div class="spinner"></div>
+        </button>
 
-        <div class="already-msg" id="alreadyMsg">
-          <span data-en="⚠ This student ID is already registered." data-tr="⚠ Bu öğrenci numarası zaten kayıtlı.">⚠ This student ID is already registered.</span>
+        <div class="global-error" id="globalError">
+          ⚠ Registration failed. Please try again or check your connection.
         </div>
 
       </form>
@@ -438,11 +412,9 @@
 
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
-const part1 = 'github_pat_11APAUCT'; // First half here
-const part2 = 'I0W0LBZE2wPvYN_1LSb2b1CDs0O8VZccNb73GzcFUs4aU9wGk1aCFx3qrqX7MEIGPNJtVN2D7k'; // Second half here
-const GITHUB_TOKEN = part1 + part2;
-const REPO_OWNER = 'apo2441';    // e.g., 'abdullah'
-const REPO_NAME = 'movie-night-final';         // e.g., 'movie-night-db'
+// Your Netlify function URL — update this after deploying to Netlify
+// Example: https://your-site-name.netlify.app/.netlify/functions/register
+const FUNCTION_URL = '/.netlify/functions/register';
 // ──────────────────────────────────────────────────────────────────────────────
 
 let currentLang = 'en';
@@ -451,15 +423,12 @@ function setLang(lang) {
   currentLang = lang;
   document.getElementById('btn-en').classList.toggle('active', lang === 'en');
   document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
-
   document.querySelectorAll('[data-en]').forEach(el => {
     const val = el.getAttribute('data-' + lang);
     if (val !== null) el.innerHTML = val;
   });
-
   const sel = document.getElementById('university');
-  const placeholder = sel.options[0];
-  placeholder.textContent = lang === 'tr' ? '— Üniversitenizi seçin —' : '— Select your university —';
+  sel.options[0].textContent = lang === 'tr' ? '— Üniversitenizi seçin —' : '— Select your university —';
   const notStudent = sel.querySelector('option[value="NOT_STUDENT"]');
   if (notStudent) notStudent.textContent = lang === 'tr' ? 'Öğrenci değilim' : 'Not a student';
 }
@@ -470,19 +439,14 @@ function handleUniChange() {
   const fg = document.getElementById('fg-studentid');
   const input = document.getElementById('studentId');
   const lbl = document.getElementById('studentIdLabel');
-
   if (isNotStudent) {
     input.required = false;
     input.placeholder = currentLang === 'tr' ? 'Uygulanmaz' : 'N/A';
-    input.value = '';
-    input.disabled = true;
-    input.style.opacity = '0.4';
+    input.value = ''; input.disabled = true; input.style.opacity = '0.4';
     lbl.innerHTML = currentLang === 'tr' ? 'Öğrenci Numarası' : 'Student ID';
     fg.classList.remove('error');
   } else {
-    input.required = true;
-    input.disabled = false;
-    input.style.opacity = '1';
+    input.required = true; input.disabled = false; input.style.opacity = '1';
     input.placeholder = '2024XXXXXXX';
     lbl.innerHTML = currentLang === 'tr'
       ? "Öğrenci Numarası <span class='req'>*</span>"
@@ -498,14 +462,12 @@ function generateUID() {
 
 function validate() {
   let ok = true;
-  const fields = [
-    { id: 'fg-name', input: 'firstName', check: v => v.trim().length > 0 },
-    { id: 'fg-surname', input: 'lastName', check: v => v.trim().length > 0 },
-    { id: 'fg-phone', input: 'phone', check: v => /^[\d\s\+\-\(\)]{7,15}$/.test(v.trim()) },
-    { id: 'fg-uni', input: 'university', check: v => v !== '' },
-  ];
-
-  fields.forEach(f => {
+  [
+    { id: 'fg-name',    input: 'firstName', check: v => v.trim().length > 0 },
+    { id: 'fg-surname', input: 'lastName',  check: v => v.trim().length > 0 },
+    { id: 'fg-phone',   input: 'phone',     check: v => /^[\d\s\+\-\(\)]{7,15}$/.test(v.trim()) },
+    { id: 'fg-uni',     input: 'university',check: v => v !== '' },
+  ].forEach(f => {
     const el = document.getElementById(f.input);
     const fg = document.getElementById(f.id);
     if (!f.check(el.value)) { fg.classList.add('error'); ok = false; }
@@ -517,55 +479,40 @@ function validate() {
   const fgSid = document.getElementById('fg-studentid');
   if (uni !== 'NOT_STUDENT' && uni !== '' && sid.value.trim().length === 0) {
     fgSid.classList.add('error'); ok = false;
-  } else {
-    fgSid.classList.remove('error');
-  }
+  } else { fgSid.classList.remove('error'); }
   return ok;
 }
 
 document.getElementById('regForm').addEventListener('submit', async function(e) {
   e.preventDefault();
-  document.getElementById('alreadyMsg').style.display = 'none';
-
+  document.getElementById('globalError').style.display = 'none';
   if (!validate()) return;
 
   const btn = document.getElementById('submitBtn');
   btn.disabled = true; btn.classList.add('loading');
 
-  const uid = generateUID();
-  const firstName = document.getElementById('firstName').value.trim();
-  const lastName  = document.getElementById('lastName').value.trim();
-  const phone     = document.getElementById('phone').value.trim();
-  const uni       = document.getElementById('university').value;
-  const sid       = document.getElementById('studentId').value.trim();
-
-  const payload = { 
-    uid, firstName, lastName, phone, university: uni, 
-    studentId: sid || 'N/A', timestamp: new Date().toISOString(),
-    admitted: false
+  const payload = {
+    uid:        generateUID(),
+    firstName:  document.getElementById('firstName').value.trim(),
+    lastName:   document.getElementById('lastName').value.trim(),
+    phone:      document.getElementById('phone').value.trim(),
+    university: document.getElementById('university').value,
+    studentId:  document.getElementById('studentId').value.trim() || 'N/A',
   };
 
   try {
-    const base64Content = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
-
-    const response = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data/${uid}.json`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${GITHUB_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message: `Registration: ${firstName} ${lastName}`,
-        content: base64Content
-      })
+    const res = await fetch(FUNCTION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
     });
 
-    if (!response.ok) throw new Error('GitHub API Error');
-    
-    showSuccess(uid, firstName + ' ' + lastName);
-  } catch(err) {
-    console.error('Submit error:', err);
-    alert("Registration failed. Please check your internet or GitHub token.");
+    if (!res.ok) throw new Error('Server error ' + res.status);
+    const data = await res.json();
+    showSuccess(data.uid || payload.uid, payload.firstName + ' ' + payload.lastName);
+  } catch (err) {
+    console.error(err);
+    document.getElementById('globalError').style.display = 'block';
   }
 
   btn.disabled = false; btn.classList.remove('loading');
@@ -574,18 +521,13 @@ document.getElementById('regForm').addEventListener('submit', async function(e) 
 function showSuccess(uid, fullName) {
   document.getElementById('successName').textContent = fullName;
   document.getElementById('successUid').textContent = uid;
-
   const qrDiv = document.getElementById('qrcode');
   qrDiv.innerHTML = '';
-
   new QRCode(qrDiv, {
-    text: uid,
-    width: 220, height: 220,
-    colorDark: '#000000',
-    colorLight: '#ffffff',
+    text: uid, width: 220, height: 220,
+    colorDark: '#000000', colorLight: '#ffffff',
     correctLevel: QRCode.CorrectLevel.H
   });
-
   setLang(currentLang);
   document.getElementById('successScreen').classList.add('show');
 }
